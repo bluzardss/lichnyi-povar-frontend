@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { Recipe } from '../types/index';
-import { api } from '../api/plainClient';
+import { apiClient } from '../api/client';
 
 interface RecipeState {
   currentRecipe: Recipe | null;
@@ -29,7 +29,7 @@ export const useRecipeStore = create<RecipeState>((set, get) => ({
       if (imageFile) {
         formData.append('image', imageFile);
       }
-      const response = await api.post<Recipe>('/analyze-dish', formData, {
+      const response = await apiClient.post<Recipe>('/api/recipes/analyze-dish', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
       set({ currentRecipe: response.data, isLoading: false });
@@ -41,7 +41,7 @@ export const useRecipeStore = create<RecipeState>((set, get) => ({
   fetchRecipe: async (id) => {
     set({ isLoading: true, error: null });
     try {
-      const response = await api.get<Recipe>(`/recipes/${id}`);
+      const response = await apiClient.get<Recipe>(`/api/recipes/${id}`);
       set({ currentRecipe: response.data, isLoading: false });
     } catch (err: any) {
       set({ error: err.response?.data?.error || err.message || 'Неизвестная ошибка', isLoading: false });
@@ -51,7 +51,7 @@ export const useRecipeStore = create<RecipeState>((set, get) => ({
   fetchHistory: async () => {
     set({ isLoading: true, error: null });
     try {
-      const response = await api.get<Recipe[]>('/recipes');
+      const response = await apiClient.get<Recipe[]>('/api/recipes');
       set({ history: response.data, isLoading: false });
     } catch (err: any) {
       set({ error: err.response?.data?.error || err.message || 'Неизвестная ошибка', isLoading: false });
@@ -61,7 +61,7 @@ export const useRecipeStore = create<RecipeState>((set, get) => ({
   deleteRecipe: async (id) => {
     set({ isLoading: true, error: null });
     try {
-      await api.delete(`/recipes/${id}`);
+      await apiClient.delete(`/api/recipes/${id}`);
       const { history, currentRecipe } = get();
       set({
         history: history.filter((r) => r?.id !== id),
