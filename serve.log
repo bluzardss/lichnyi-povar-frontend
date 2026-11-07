@@ -27,3 +27,5 @@ npm notice run serve -s dist -l 5173
  HTTP  07/11/2026 00:32:37 127.0.0.1 GET /assets/index-D-ham7M2.js
  HTTP  07/11/2026 00:32:37 127.0.0.1 Returned 304 in 1 ms
  HTTP  07/11/2026 00:32:37 127.0.0.1 Returned 304 in 0 ms
+ HTTP  07/11/2026 17:12:18 ::1 GET /robots.txt
+ HTTP  07/11/2026 17:12:18 ::1 Returned 200 in 11 ms

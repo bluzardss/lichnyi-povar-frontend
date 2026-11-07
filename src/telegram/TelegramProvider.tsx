@@ -19,7 +19,8 @@ export function TelegramProvider({ children }: PropsWithChildren) {
           launchParams: {
             tgWebAppData: new URLSearchParams({
               user: JSON.stringify({ id: 1, first_name: 'Гость' }),
-              hash: 'mock',
+              auth_date: Math.floor(Date.now() / 1000).toString(),
+              hash: 'mock_hash',
             }),
           },
         });
