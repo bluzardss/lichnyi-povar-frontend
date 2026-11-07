@@ -79,11 +79,8 @@ export const RecipeCard: React.FC<RecipeCardProps> = ({
           <span className="mr-4">
             🕒 {recipe.время_готовки_минут} мин
           </span>
-          <span>
-            🔥 {getCalorieColor(recipe.калории_на_порцию)}
-            <span className="whitespace-nowrap">
-              {recipe.калории_на_порцию} ккал/порция
-            </span>
+          <span style={{ color: getCalorieColor(recipe.калории_на_порцию) }}>
+            🔥 {recipe.калории_на_порцию} ккал/порция
           </span>
         </div>
       </div>

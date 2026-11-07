@@ -2,6 +2,26 @@ import { create } from 'zustand';
 import { Recipe } from '../types/index';
 import { apiClient } from '../api/client';
 
+const STORAGE_KEY = 'saved_recipes';
+const MAX_STORED_RECIPES = 10;
+
+const loadFromStorage = (): Recipe[] => {
+  try {
+    const data = localStorage.getItem('saved_recipes');
+    return data ? JSON.parse(data) : [];
+  } catch {
+    return [];
+  }
+};
+
+const saveToStorage = (recipes: Recipe[]) => {
+  try {
+    localStorage.setItem('saved_recipes', JSON.stringify(recipes.slice(-MAX_STORED_RECIPES)));
+  } catch {
+    // ignore storage errors
+  }
+};
+
 interface RecipeState {
   currentRecipe: Recipe | null;
   history: Recipe[];
@@ -32,7 +52,14 @@ export const useRecipeStore = create<RecipeState>((set, get) => ({
       const response = await apiClient.post<Recipe>('/api/recipes/analyze-dish', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
-      set({ currentRecipe: response.data, isLoading: false });
+      const newRecipe = response.data;
+      set({ currentRecipe: newRecipe, isLoading: false });
+      
+      // Save to localStorage
+      const stored = loadFromStorage();
+      const updated = [...stored, newRecipe].slice(-MAX_STORED_RECIPES);
+      saveToStorage(updated);
+      set({ history: updated });
     } catch (err: any) {
       set({ error: err.response?.data?.error || err.message || 'Неизвестная ошибка', isLoading: false });
     }
@@ -44,7 +71,14 @@ export const useRecipeStore = create<RecipeState>((set, get) => ({
       const response = await apiClient.get<Recipe>(`/api/recipes/${id}`);
       set({ currentRecipe: response.data, isLoading: false });
     } catch (err: any) {
-      set({ error: err.response?.data?.error || err.message || 'Неизвестная ошибка', isLoading: false });
+      // Fallback to localStorage if API fails (e.g., 404)
+      const stored = loadFromStorage();
+      const cached = stored.find((r: Recipe) => r.id === id);
+      if (cached) {
+        set({ currentRecipe: cached, isLoading: false });
+      } else {
+        set({ error: err.response?.data?.error || err.message || 'Неизвестная ошибка', isLoading: false });
+      }
     }
   },
 
@@ -52,9 +86,22 @@ export const useRecipeStore = create<RecipeState>((set, get) => ({
     set({ isLoading: true, error: null });
     try {
       const response = await apiClient.get<Recipe[]>('/api/recipes');
-      set({ history: response.data, isLoading: false });
+      if (response.data && response.data.length > 0) {
+        set({ history: response.data, isLoading: false });
+        saveToStorage(response.data);
+      } else {
+        // Fallback to localStorage if API returns empty
+        const stored = loadFromStorage();
+        set({ history: stored, isLoading: false });
+      }
     } catch (err: any) {
-      set({ error: err.response?.data?.error || err.message || 'Неизвестная ошибка', isLoading: false });
+      // Fallback to localStorage on error
+      const stored = loadFromStorage();
+      if (stored.length > 0) {
+        set({ history: stored, isLoading: false });
+      } else {
+        set({ error: err.response?.data?.error || err.message || 'Неизвестная ошибка', isLoading: false });
+      }
     }
   },
 
