@@ -1,0 +1,348 @@
+@import url('https://fonts.googleapis.com/css2?family=Segoe+UI:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ============================================
+   Windows 7 / Aero Glass / Frutiger Aero Theme
+   ============================================ */
+
+:root {
+  /* Windows 7 Classic Blue Gradient Background */
+  --bg-gradient-start: #0096FF;
+  --bg-gradient-end: #003399;
+  --bg-classic: #003399;
+  
+  /* Aero Glass Surfaces */
+  --surface: rgba(255, 255, 255, 0.2);
+  --surface-elevated: rgba(255, 255, 255, 0.25);
+  --surface-hover: rgba(255, 255, 255, 0.3);
+  
+  /* Borders & Highlights */
+  --border: rgba(255, 255, 255, 0.3);
+  --border-highlight: rgba(255, 255, 255, 0.5);
+  --border-subtle: rgba(255, 255, 255, 0.15);
+  
+  /* Accent Colors */
+  --accent: #0078D7;
+  --accent-hover: #005A9E;
+  --accent-pressed: #004578;
+  --accent-glow: rgba(0, 120, 215, 0.4);
+  
+  /* Text Colors */
+  --text-primary: #FFFFFF;
+  --text-muted: rgba(255, 255, 255, 0.7);
+  --text-dim: rgba(255, 255, 255, 0.5);
+  --text-dark: #003399;
+  
+  /* Button Gradients */
+  --btn-gradient-start: #3399FF;
+  --btn-gradient-end: #0066CC;
+  --btn-pressed-start: #0055AA;
+  --btn-pressed-end: #004488;
+  
+  /* Input Styles */
+  --input-bg: rgba(255, 255, 255, 0.15);
+  --input-border: rgba(0, 0, 0, 0.3);
+  --input-border-highlight: rgba(255, 255, 255, 0.4);
+  --input-inset-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ============================================
+   Base Styles
+   ============================================ */
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-tap-highlight-color: transparent;
+  font-family: 'Segoe UI', Tahoma, Verdana, system-ui, sans-serif;
+}
+
+body {
+  @apply bg-background-classic text-text font-sans antialiased;
+  background: linear-gradient(180deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
+  min-height: 100vh;
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* Subtle noise texture overlay for Frutiger Aero feel */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  opacity: 0.03;
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* Custom scrollbar - Windows style */
+::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(0, 51, 153, 0.3);
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #3399FF, #0066CC);
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  border-radius: 6px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #44AAFF, #0077DD);
+}
+
+::-webkit-scrollbar-corner {
+  background: rgba(0, 51, 153, 0.3);
+}
+
+/* Selection */
+::selection {
+  background: rgba(0, 120, 215, 0.5);
+  color: #FFFFFF;
+}
+
+/* Focus visible */
+*:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px #003399, 0 0 0 4px #3399FF;
+}
+
+/* ============================================
+   Aero Glass Components
+   ============================================ */
+
+.glass {
+  @apply bg-surface/50 backdrop-blur-glass border border-border;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+}
+
+.glass-elevated {
+  @apply bg-surface-elevated/60 backdrop-blur-strong border border-border;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+}
+
+.glass-strong {
+  @apply bg-white/30 backdrop-blur-strong border border-border-highlight;
+  box-shadow: 
+    0 8px 24px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+
+/* Aero highlight - top border glow */
+.glass::before,
+.glass-elevated::before,
+.glass-strong::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--border-highlight), transparent);
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+/* ============================================
+   Buttons - Glossy Windows 7 Style
+   ============================================ */
+
+.btn-glass {
+  @apply relative px-6 py-3 rounded-button font-semibold text-white
+         bg-gradient-to-b from-button-gradientStart to-button-gradientEnd
+         border border-border
+         shadow-button-gloss transition-all duration-150
+         disabled:opacity-50 disabled:cursor-not-allowed;
+}
+
+.btn-glass:hover {
+  @apply shadow-glass-hover;
+  background: linear-gradient(180deg, #44AAFF, #0077DD);
+}
+
+.btn-glass:active {
+  @apply shadow-button-pressed;
+  background: linear-gradient(180deg, var(--btn-pressed-start), var(--btn-pressed-end));
+  transform: translateY(1px);
+}
+
+.btn-glass-secondary {
+  @apply relative px-6 py-3 rounded-button font-semibold text-white
+         bg-surface-elevated/50 backdrop-blur-glass border border-border-subtle
+         shadow-glass transition-all duration-150
+         disabled:opacity-50 disabled:cursor-not-allowed;
+}
+
+.btn-glass-secondary:hover {
+  @apply bg-surface-hover border-border shadow-glass-hover;
+}
+
+.btn-glass-secondary:active {
+  @apply shadow-button-pressed;
+  transform: translateY(1px);
+}
+
+/* ============================================
+   Cards - Aero Glass Panels
+   ============================================ */
+
+.card-glass {
+  @apply glass rounded-card p-6 transition-all duration-200;
+  position: relative;
+}
+
+.card-glass:hover {
+  @apply glass-elevated;
+}
+
+.card-glass-elevated {
+  @apply glass-elevated rounded-card p-6 transition-all duration-200;
+  position: relative;
+}
+
+/* ============================================
+   Inputs - Windows 95/98 Style with Inset Shadows
+   ============================================ */
+
+.input-glass {
+  @apply w-full px-4 py-3 rounded-input text-text placeholder-text-dim
+         bg-input-bg border-2
+         border-l-[var(--input-border-highlight)] border-t-[var(--input-border-highlight)]
+         border-r-[var(--input-border)] border-b-[var(--input-border)]
+         focus:outline-none focus:ring-2 focus:ring-accent/50 focus:border-accent
+         transition-all duration-150
+         shadow-input-inset;
+  background-image: linear-gradient(180deg, rgba(255,255,255,0.1) 0%, transparent 50%, rgba(0,0,0,0.05) 100%);
+}
+
+.input-glass::placeholder {
+  @apply text-text-dim;
+}
+
+.input-glass:focus {
+  @apply bg-white/25 border-accent;
+  box-shadow: 
+    inset 0 2px 4px rgba(0, 0, 0, 0.2),
+    0 0 0 2px rgba(0, 120, 215, 0.3),
+    0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+/* ============================================
+   Typography - Segoe UI / Tahoma
+   ============================================ */
+
+.text-display {
+  @apply font-display font-bold tracking-tight text-text;
+}
+
+.text-headline {
+  @apply font-display font-semibold tracking-tight text-text;
+}
+
+.text-body {
+  @apply text-text leading-relaxed;
+}
+
+.text-muted {
+  @apply text-text-muted;
+}
+
+.text-dim {
+  @apply text-text-dim;
+}
+
+/* ============================================
+   Animations
+   ============================================ */
+
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 10px rgba(0, 120, 215, 0.4); }
+  50% { box-shadow: 0 0 20px rgba(0, 120, 215, 0.6); }
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+/* ============================================
+   Utility Classes
+   ============================================ */
+
+.container-main {
+  @apply max-w-5xl mx-auto px-4 sm:px-6 lg:px-8;
+}
+
+.section-spacing {
+  @apply py-8 sm:py-12 lg:py-16;
+}
+
+/* Safe area insets for mobile */
+.safe-top {
+  padding-top: env(safe-area-inset-top);
+}
+
+.safe-bottom {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+.safe-left {
+  padding-left: env(safe-area-inset-left);
+}
+
+.safe-right {
+  padding-right: env(safe-area-inset-right);
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ============================================
+   Win95/98 Style Inset Elements
+   ============================================ */
+
+.win95-inset {
+  @apply shadow-win95-inset;
+  border: 2px solid;
+  border-color: #FFFFFF #808080 #808080 #FFFFFF;
+}
+
+.win95-raised {
+  border: 2px solid;
+  border-color: #FFFFFF #FFFFFF #808080 #808080;
+  background: #C0C0C0;
+}
+
+/* Classic Windows 7 taskbar-style */
+.taskbar-style {
+  @apply bg-white/20 backdrop-blur-glass border-t border-border-highlight;
+  box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.5);
+}

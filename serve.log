@@ -1,0 +1,29 @@
+npm notice run личный-повар-фронтенд@1.0.0 npx
+npm notice run serve -s dist -l 5173
+ INFO  Accepting connections at http://localhost:5173
+ HTTP  06/11/2026 18:40:58 127.0.0.1 GET /
+ HTTP  06/11/2026 18:40:58 127.0.0.1 Returned 200 in 44 ms
+ HTTP  06/11/2026 18:41:12 127.0.0.1 HEAD /
+ HTTP  06/11/2026 18:41:12 127.0.0.1 Returned 200 in 1 ms
+ HTTP  06/11/2026 23:49:34 127.0.0.1 GET /
+ HTTP  06/11/2026 23:49:34 127.0.0.1 Returned 200 in 9 ms
+ HTTP  07/11/2026 00:30:25 127.0.0.1 GET /
+ HTTP  07/11/2026 00:30:25 127.0.0.1 Returned 200 in 2 ms
+ HTTP  07/11/2026 00:32:28 127.0.0.1 GET /
+ HTTP  07/11/2026 00:32:28 127.0.0.1 Returned 200 in 1 ms
+ HTTP  07/11/2026 00:32:28 127.0.0.1 GET /assets/index-D-ham7M2.js
+ HTTP  07/11/2026 00:32:28 127.0.0.1 Returned 200 in 127 ms
+ HTTP  07/11/2026 00:32:29 127.0.0.1 GET /assets/index-BS9hfA7L.css
+ HTTP  07/11/2026 00:32:29 127.0.0.1 Returned 200 in 3 ms
+ HTTP  07/11/2026 00:32:35 127.0.0.1 GET /
+ HTTP  07/11/2026 00:32:35 127.0.0.1 Returned 200 in 1 ms
+ HTTP  07/11/2026 00:32:35 127.0.0.1 GET /assets/index-BS9hfA7L.css
+ HTTP  07/11/2026 00:32:35 127.0.0.1 Returned 304 in 0 ms
+ HTTP  07/11/2026 00:32:35 127.0.0.1 GET /assets/index-D-ham7M2.js
+ HTTP  07/11/2026 00:32:35 127.0.0.1 Returned 304 in 1 ms
+ HTTP  07/11/2026 00:32:37 127.0.0.1 GET /
+ HTTP  07/11/2026 00:32:37 127.0.0.1 Returned 200 in 1 ms
+ HTTP  07/11/2026 00:32:37 127.0.0.1 GET /assets/index-BS9hfA7L.css
+ HTTP  07/11/2026 00:32:37 127.0.0.1 GET /assets/index-D-ham7M2.js
+ HTTP  07/11/2026 00:32:37 127.0.0.1 Returned 304 in 1 ms
+ HTTP  07/11/2026 00:32:37 127.0.0.1 Returned 304 in 0 ms
