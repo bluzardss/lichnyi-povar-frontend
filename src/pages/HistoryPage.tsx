@@ -29,7 +29,7 @@ const HistoryPage: React.FC = () => {
     const matchesSearch = recipe.название_блюда.toLowerCase().includes(searchTerm.toLowerCase());
     // For now, ignore filter; we'll just return true for all filters to avoid complexity.
     // We'll implement a simple calorie filter based on recipe.пищевая_ценность.калории_на_порцию
-    const calories = recipe.пищевая_ценность?.калории_на_порция ?? 0;
+    const calories = recipe.пищевая_ценность?.калории_на_порцию ?? 0;
     let matchesFilter = true;
     switch (selectedFilter) {
       case 'under300':
