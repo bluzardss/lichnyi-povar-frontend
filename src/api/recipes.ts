@@ -11,6 +11,10 @@ export const useRecipes = () => {
   const analyzeDish = useCallback(async (text: string, imageFile?: File): Promise<Recipe> => {
     const formData = new FormData()
     formData.append('text', text)
+    // Default interview parameters for Mini App (no FSM interview in Mini App)
+    formData.append('servings', '2')
+    formData.append('cuisine', 'Любая')
+    formData.append('preferences', 'Никаких')
     if (imageFile) {
       formData.append('image', imageFile)
     }
