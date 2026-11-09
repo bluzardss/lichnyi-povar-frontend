@@ -22,6 +22,24 @@ const saveToStorage = (recipes: Recipe[]) => {
   }
 };
 
+// Helper to save individual recipe by ID
+const saveRecipeToStorage = (recipe: Recipe) => {
+  try {
+    localStorage.setItem(`recipe_${recipe.id}`, JSON.stringify(recipe));
+  } catch {
+    // ignore storage errors
+  }
+};
+
+const loadRecipeFromStorage = (id: number): Recipe | null => {
+  try {
+    const data = localStorage.getItem(`recipe_${id}`);
+    return data ? JSON.parse(data) : null;
+  } catch {
+    return null;
+  }
+};
+
 interface RecipeState {
   currentRecipe: Recipe | null;
   history: Recipe[];
@@ -55,7 +73,8 @@ export const useRecipeStore = create<RecipeState>((set, get) => ({
       const newRecipe = response.data;
       set({ currentRecipe: newRecipe, isLoading: false });
       
-      // Save to localStorage
+      // Save to localStorage - both individual recipe by ID and history array
+      saveRecipeToStorage(newRecipe);
       const stored = loadFromStorage();
       const updated = [...stored, newRecipe].slice(-MAX_STORED_RECIPES);
       saveToStorage(updated);
@@ -72,12 +91,18 @@ export const useRecipeStore = create<RecipeState>((set, get) => ({
       set({ currentRecipe: response.data, isLoading: false });
     } catch (err: any) {
       // Fallback to localStorage if API fails (e.g., 404)
-      const stored = loadFromStorage();
-      const cached = stored.find((r: Recipe) => r.id === id);
+      const cached = loadRecipeFromStorage(id);
       if (cached) {
         set({ currentRecipe: cached, isLoading: false });
       } else {
-        set({ error: err.response?.data?.error || err.message || 'Неизвестная ошибка', isLoading: false });
+        // Fallback to old storage format
+        const stored = loadFromStorage();
+        const cachedOld = stored.find((r: Recipe) => r.id === id);
+        if (cachedOld) {
+          set({ currentRecipe: cachedOld, isLoading: false });
+        } else {
+          set({ error: err.response?.data?.error || err.message || 'Неизвестная ошибка', isLoading: false });
+        }
       }
     }
   },
@@ -115,6 +140,12 @@ export const useRecipeStore = create<RecipeState>((set, get) => ({
         currentRecipe: currentRecipe?.id === id ? null : currentRecipe,
         isLoading: false,
       });
+      // Also remove from localStorage
+      try {
+        localStorage.removeItem(`recipe_${id}`);
+      } catch {
+        // ignore
+      }
     } catch (err: any) {
       set({ error: err.response?.data?.error || err.message || 'Неизвестная ошибка', isLoading: false });
     }
