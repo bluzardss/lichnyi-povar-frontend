@@ -76,6 +76,10 @@ export const useRecipeStore = create<RecipeState>((set, get) => ({
       if (imageFile) {
         formData.append('image', imageFile)
       }
+      // Default interview parameters for Mini App (no FSM interview in Mini App)
+      formData.append('servings', '2')
+      formData.append('cuisine', 'Любая')
+      formData.append('preferences', 'Никаких')
       const response = await apiClient.post<RecipeWithId>('/api/recipes/analyze-dish', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       })
